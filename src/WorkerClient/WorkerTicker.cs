@@ -25,9 +25,16 @@ namespace Ticketing.Web.WorkerClient
             set;
         }
 
-        public string Alive(string message)
+        public string Echo(string message)
         {
-            message = $"Alive called: {message}";
+            message = $"Echo: {message}";
+            Console.WriteLine(message);
+            return message;
+        }
+
+        public string BroadcastMessage(string username, string message)
+        {
+            message = $"{username}: {message}";
             Console.WriteLine(message);
             return message;
         }
