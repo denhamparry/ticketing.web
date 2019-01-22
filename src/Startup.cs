@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ticketing.Web.Hubs;
+using Ticketing.Web.WorkerClient;
 
 namespace ticketing.web
 {
@@ -32,6 +34,11 @@ namespace ticketing.web
             });
 
 
+            services.AddSignalR()
+                    .AddMessagePackProtocol();
+
+            services.AddSingleton<WorkerTicker>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -52,6 +59,12 @@ namespace ticketing.web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<WorkerHub>("/workers");
+            });
 
             app.UseMvc(routes =>
             {
