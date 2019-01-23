@@ -19,6 +19,16 @@ namespace ticketing.web.Controllers
         {
             return View();
         }
+
+        public IActionResult Applause()
+        {
+            return View();
+        }
+        
+        public IActionResult Redirect()
+        {
+            return Redirect("https://youtu.be/kQQ9npyZNiw?t=572");
+        }
         public IActionResult Terminal()
         {
             return View();
