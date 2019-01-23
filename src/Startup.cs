@@ -33,9 +33,19 @@ namespace ticketing.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddSignalR()
+            if(String.IsNullOrEmpty(Configuration.GetValue<string>("Azure__SignalR__ConnectionString")))
+            {
+                Console.WriteLine("Local SignalR 1");
+                services.AddSignalR()
+                        .AddMessagePackProtocol();
+            }
+            else
+            {
+                Console.WriteLine("Azure SignalR 1");
+                services.AddSignalR()
+                    .AddAzureSignalR()
                     .AddMessagePackProtocol();
+            }
 
             services.AddSingleton<WorkerTicker>();
 
@@ -60,11 +70,22 @@ namespace ticketing.web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-
-            app.UseSignalR(routes =>
+            if(String.IsNullOrEmpty(Configuration.GetValue<string>("Azure__SignalR__ConnectionString")))
             {
-                routes.MapHub<WorkerHub>("/workers");
-            });
+                Console.WriteLine("Local SignalR Map 1");
+                app.UseSignalR(routes =>
+                {
+                    routes.MapHub<WorkerHub>("/workers");
+                });
+            }
+            else
+            {
+                Console.WriteLine("Azure SignalR Map 1");
+                app.UseAzureSignalR(routes =>
+                {
+                    routes.MapHub<WorkerHub>("/workers");
+                });
+            }
 
             app.UseMvc(routes =>
             {
