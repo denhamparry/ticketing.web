@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ticketing.Web.Hubs;
-using Ticketing.Web.WorkerClient;
+using Ticketing.Web.Clients;
 
 namespace Ticketing.Web
 {
@@ -53,7 +53,7 @@ namespace Ticketing.Web
                     .AddMessagePackProtocol();
             }
 
-            services.AddSingleton<WorkerTicker>();
+            services.AddSingleton<WorkerClient>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

@@ -7,5 +7,10 @@ namespace Ticketing.Web
             get;
             set;
         }
+        public string TicketingAPI
+        {
+            get;
+            set;
+        }
     }
 }

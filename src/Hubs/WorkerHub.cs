@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Ticketing.Web.WorkerClient;
+using Ticketing.Web.Clients;
 
 namespace Ticketing.Web.Hubs
 {
     public class WorkerHub : Hub
     {
-        private readonly WorkerTicker _workerTicker;
+        private readonly WorkerClient _workerClient;
 
-        public WorkerHub(WorkerTicker stockTicker)
+        public WorkerHub(WorkerClient workerClient)
         {
-            _workerTicker = stockTicker;
+            _workerClient = workerClient;
         }
 
         public string BroadcastMessage(string name, string message)
         {
             Clients.All.SendAsync("broadcastMessage", name, message);
             Console.WriteLine($"[{DateTime.Now.ToString()}] BroadcastMessage | {name} : {message}");
-            return _workerTicker.BroadcastMessage(name, message);
+            return _workerClient.BroadcastMessage(name, message);
         }
 
         public async void JoinGroup(string name, string groupName)
@@ -42,6 +42,13 @@ namespace Ticketing.Web.Hubs
         {
             Clients.Group(groupName).SendAsync("broadcastMessage", name, message);
             Console.WriteLine($"[{DateTime.Now.ToString()}] SendGroup | {groupName} : {name} : {message}");
+        }
+
+
+        public void SendGroupComplete(string name, string groupName, string message)
+        {
+            Clients.Group(groupName).SendAsync("completed", message);
+            Console.WriteLine($"[{DateTime.Now.ToString()}] SendGroupComplete | {groupName} : {name} : {message}");
         }
     }
 }

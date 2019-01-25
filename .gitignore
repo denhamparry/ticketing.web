@@ -3,3 +3,4 @@ obj
 properties
 lib
 appsettings.Development.json
+.vscode
