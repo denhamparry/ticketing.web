@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ticketing.Web.Clients;
 using Ticketing.Web.Models;
 
 namespace Ticketing.Web.Controllers
@@ -17,9 +16,11 @@ namespace Ticketing.Web.Controllers
         }
 
         [HttpPost("ticket")]
-        public IActionResult Ticket()
+        public async Task<IActionResult> Ticket()
         {
-            SetCookie("ticketId", "test", 30);
+            var client = new TicketClient();
+            var tickets = await client.GetTickets();
+            SetCookie("ticketId", tickets.Id, 30);
             return RedirectToAction("Processing"); 
         }
 
