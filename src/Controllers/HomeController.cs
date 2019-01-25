@@ -27,7 +27,7 @@ namespace Ticketing.Web.Controllers
             var client = new TicketClient(_appSettings);
             var tickets = await client.GetTickets();
             SetCookie("ticketId", tickets.Id, 30);
-            return RedirectToAction("Processing"); 
+            return RedirectToAction("Processing", new { ticketId = tickets.Id });
         }
 
         public IActionResult Applause()
@@ -39,8 +39,10 @@ namespace Ticketing.Web.Controllers
         {
             return Redirect("https://youtu.be/kQQ9npyZNiw?t=572");
         }
-        public IActionResult Processing()
+        public IActionResult Processing(string ticketId = null)
         {
+
+            ViewBag.TicketId = ticketId;
             return View();
         }
 
