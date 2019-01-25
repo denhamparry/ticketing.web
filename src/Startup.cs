@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ticketing.Web.Hubs;
 using Ticketing.Web.WorkerClient;
 
-namespace ticketing.web
+namespace Ticketing.Web
 {
     public class Startup
     {
@@ -26,6 +26,10 @@ namespace ticketing.web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.Configure<AppConfiguration>(Configuration.GetSection("AppConfiguration"));
+            services.Configure<AppConfiguration>(Configuration);
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -33,17 +37,19 @@ namespace ticketing.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            if(String.IsNullOrEmpty(Configuration.GetValue<string>("Azure__SignalR__ConnectionString")))
+            bool localSignalR = String.IsNullOrEmpty(Configuration.GetSection("AppConfiguration").GetValue<string>("AzureSignalRConnectionString"));
+
+            if(localSignalR)
             {
-                Console.WriteLine("Local SignalR 1");
+                Console.WriteLine("Local SignalR Configure Service");
                 services.AddSignalR()
                         .AddMessagePackProtocol();
             }
             else
             {
-                Console.WriteLine("Azure SignalR 1");
+                Console.WriteLine("Azure SignalR Configure Service");
                 services.AddSignalR()
-                    .AddAzureSignalR()
+                    .AddAzureSignalR(Configuration.GetSection("AppConfiguration").GetValue<string>("AzureSignalRConnectionString"))
                     .AddMessagePackProtocol();
             }
 
@@ -54,7 +60,7 @@ namespace ticketing.web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,9 +76,11 @@ namespace ticketing.web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            if(String.IsNullOrEmpty(Configuration.GetValue<string>("Azure__SignalR__ConnectionString")))
+            bool localSignalR = String.IsNullOrEmpty(Configuration.GetSection("AppConfiguration").GetValue<string>("AzureSignalRConnectionString"));
+
+            if(localSignalR)
             {
-                Console.WriteLine("Local SignalR Map 1");
+                Console.WriteLine("Local SignalR Configure");
                 app.UseSignalR(routes =>
                 {
                     routes.MapHub<WorkerHub>("/workers");
@@ -80,7 +88,7 @@ namespace ticketing.web
             }
             else
             {
-                Console.WriteLine("Azure SignalR Map 1");
+                Console.WriteLine("Azure SignalR Configure");
                 app.UseAzureSignalR(routes =>
                 {
                     routes.MapHub<WorkerHub>("/workers");

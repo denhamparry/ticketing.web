@@ -1,6 +1,6 @@
 using System;
 
-namespace ticketing.web.Models
+namespace Ticketing.Web.Models
 {
     public class ErrorViewModel
     {
