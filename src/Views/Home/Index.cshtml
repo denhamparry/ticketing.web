@@ -4,5 +4,10 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form method="post" >
+    </form>
+    @using (Html.BeginForm("Ticket", "Home", FormMethod.Post, null))
+    {
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Get ticket</button>
+    }
 </div>
