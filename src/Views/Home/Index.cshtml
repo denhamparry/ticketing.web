@@ -4,10 +4,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <form method="post" >
-    </form>
-    @using (Html.BeginForm("Ticket", "Home", FormMethod.Post, null))
-    {
+    <form action="/ticket" method="post" asp-antiforgery="false"> 
         <button type="submit" class="btn btn-primary btn-lg btn-block">Get ticket</button>
-    }
+    </form>
 </div>
