@@ -28,7 +28,6 @@ namespace Ticketing.Web.WorkerClient
         public string BroadcastMessage(string name, string message)
         {
             message = $"{name}: {message}";
-            Console.WriteLine(message);
             return message;
         }
     }
