@@ -24,17 +24,10 @@ namespace Ticketing.Web.WorkerClient
             get;
             set;
         }
-
-        public string Echo(string message)
+        
+        public string BroadcastMessage(string name, string message)
         {
-            message = $"Echo: {message}";
-            Console.WriteLine(message);
-            return message;
-        }
-
-        public string BroadcastMessage(string username, string message)
-        {
-            message = $"{username}: {message}";
+            message = $"{name}: {message}";
             Console.WriteLine(message);
             return message;
         }
