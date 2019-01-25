@@ -2,3 +2,4 @@ bin
 obj
 properties
 lib
+appsettings.Development.json
