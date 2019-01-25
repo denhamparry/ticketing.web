@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ticketing.Web.Models;
 
@@ -15,9 +16,11 @@ namespace Ticketing.Web.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost("ticket")]
+        public IActionResult Ticket()
         {
-            return View();
+            SetCookie("ticketId", "test", 30);
+            return RedirectToAction("Processing"); 
         }
 
         public IActionResult Applause()
@@ -29,7 +32,7 @@ namespace Ticketing.Web.Controllers
         {
             return Redirect("https://youtu.be/kQQ9npyZNiw?t=572");
         }
-        public IActionResult Terminal()
+        public IActionResult Processing()
         {
             return View();
         }
@@ -39,5 +42,17 @@ namespace Ticketing.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public void SetCookie(string key, string value, int? expireTime)  
+        {  
+            CookieOptions option = new CookieOptions();  
+
+            if (expireTime.HasValue)  
+                    option.Expires = DateTime.Now.AddMinutes(expireTime.Value);  
+            else  
+                    option.Expires = DateTime.Now.AddMilliseconds(10);  
+            
+            Response.Cookies.Append(key, value, option);  
+            }  
     }
 }
