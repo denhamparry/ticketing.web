@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Ticketing.Web.Clients;
 using Ticketing.Web.Models;
 
@@ -10,6 +11,11 @@ namespace Ticketing.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private IOptionsSnapshot<AppConfiguration> _appSettings;
+        public HomeController(IOptionsSnapshot<AppConfiguration> appSettings)
+        {
+            _appSettings = appSettings;
+        }
         public IActionResult Index()
         {
             return View();
@@ -18,7 +24,7 @@ namespace Ticketing.Web.Controllers
         [HttpPost("ticket")]
         public async Task<IActionResult> Ticket()
         {
-            var client = new TicketClient();
+            var client = new TicketClient(_appSettings);
             var tickets = await client.GetTickets();
             SetCookie("ticketId", tickets.Id, 30);
             return RedirectToAction("Processing"); 
