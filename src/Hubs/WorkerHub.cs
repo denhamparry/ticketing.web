@@ -18,8 +18,8 @@ namespace Ticketing.Web.Hubs
 
         public string BroadcastMessage(string name, string message)
         {
-            return _workerTicker.BroadcastMessage(name, message);
             Clients.All.SendAsync("[{DateTime.Now.ToString()}] broadcastMessage", name, message);
+            return _workerTicker.BroadcastMessage(name, message);
         }
 
         public async void JoinGroup(string name, string groupName)
