@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Ticketing.Web.Hubs;
 
-namespace Ticketing.Web.WorkerClient
+namespace Ticketing.Web.Clients
 {
-    public class WorkerTicker
+    public class WorkerClient
     {
         private readonly SemaphoreSlim _stateLock = new SemaphoreSlim(1, 1);
 
-        public WorkerTicker(IHubContext<WorkerHub> hub)
+        public WorkerClient(IHubContext<WorkerHub> hub)
         {
             Hub = hub;
         }
