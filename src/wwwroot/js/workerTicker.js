@@ -3,8 +3,12 @@
     .build();
 
 connection.start().then(function () {
+    var name = "WebUser";
+    var groupName = "TestGroup";
     consoleText('Javascript here, reporting for duty!');
     consoleText('Attempting connection to SignalR hub...');
+    connection.invoke("broadcastMessage", name, "New challenger approaching!").catch(err => console.error(err.toString()));
+    connection.invoke("JoinGroup", name, groupName).catch(err => console.error(err.toString()));
 });
 
 connection.on("group", function (name, message) {
