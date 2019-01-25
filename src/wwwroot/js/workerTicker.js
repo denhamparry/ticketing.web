@@ -8,11 +8,6 @@ connection.start().then(function () {
     consoleText('Attempting connection to SignalR hub...');
     connection.invoke("broadcastMessage", name, "New challenger approaching!").catch(err => console.error(err.toString()));
     var groupName = getCookie("ticketId");
-    console.log();
-    if(!groupName)
-    {
-        window.location.replace("/");
-    }
     consoleText('Trying to join group ' + groupName);
     connection.invoke("JoinGroup", name, groupName).catch(err => console.error(err.toString()));
     consoleText('Now just waiting for a worker...');
