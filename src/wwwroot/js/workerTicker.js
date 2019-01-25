@@ -19,6 +19,11 @@ connection.on("broadcastMessage", function (name, message) {
     broadcastMessage(name, message);
 });
 
+connection.on("completed", function (url) {
+    window.location.replace(url);
+});
+
+
 function groupMessage(name, message) {
     var printMessage = getDateTime() + ": groupMessage from " + name + ": " + message;
     console.log(printMessage);

@@ -43,5 +43,12 @@ namespace Ticketing.Web.Hubs
             Clients.Group(groupName).SendAsync("broadcastMessage", name, message);
             Console.WriteLine($"[{DateTime.Now.ToString()}] SendGroup | {groupName} : {name} : {message}");
         }
+
+
+        public void SendGroupComplete(string name, string groupName, string message)
+        {
+            Clients.Group(groupName).SendAsync("completed", message);
+            Console.WriteLine($"[{DateTime.Now.ToString()}] SendGroupComplete | {groupName} : {name} : {message}");
+        }
     }
 }
