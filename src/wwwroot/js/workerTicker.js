@@ -4,11 +4,13 @@
 
 connection.start().then(function () {
     var name = "WebUser";
-    var groupName = "TestGroup";
     consoleText('Javascript here, reporting for duty!');
     consoleText('Attempting connection to SignalR hub...');
     connection.invoke("broadcastMessage", name, "New challenger approaching!").catch(err => console.error(err.toString()));
+    var groupName = getCookie("ticketId");
+    consoleText('Trying to join group ' + groupName);
     connection.invoke("JoinGroup", name, groupName).catch(err => console.error(err.toString()));
+    consoleText('Now just waiting for a worker...');
 });
 
 connection.on("group", function (name, message) {
@@ -56,3 +58,9 @@ function getDateTime() {
 }
 
 function pad(n) { return ("0" + n).slice(-2); }
+
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
