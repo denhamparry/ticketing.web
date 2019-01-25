@@ -3,38 +3,8 @@
     .build();
 
 connection.start().then(function () {
-    // connection.invoke("GetAllStocks").then(function (stocks) {
-    //     for (let i = 0; i < stocks.length; i++) {
-    //         displayStock(stocks[i]);
-    //     }
-    // });
-
-    // connection.invoke("GetMarketState").then(function (state) {
-    //     if (state === 'Open') {
-    //         marketOpened();
-    //         startStreaming();
-    //     } else {
-    //         marketClosed();
-    //     }
-    // });
-
-    // document.getElementById('open').onclick = function () {
-    //     connection.invoke("OpenMarket");
-    // }
-
-    // document.getElementById('close').onclick = function () {
-    //     connection.invoke("CloseMarket");
-    // }
-
-    // document.getElementById('reset').onclick = function () {
-    //     connection.invoke("Reset").then(function () {
-    //         connection.invoke("GetAllStocks").then(function (stocks) {
-    //             for (let i = 0; i < stocks.length; ++i) {
-    //                 displayStock(stocks[i]);
-    //             }
-    //         });
-    //     });
-    // }
+    consoleText('Javascript here, reporting for duty!');
+    consoleText('Attempting connection to SignalR hub...');
 });
 
 connection.on("group", function (name, message) {
@@ -46,9 +16,34 @@ connection.on("broadcastMessage", function (name, message) {
 });
 
 function groupMessage(name, message) {
-    console.log("groupMessage from " + name, message);
+    var printMessage = getDateTime() + ": groupMessage from " + name + ": " + message;
+    console.log(printMessage);
+    consoleText(printMessage);
 }
 
 function broadcastMessage(name, message) {
-    console.log("broadcastMessage from " + name, message);
+    var printMessage = getDateTime() + ": broadcastMessage from " + name + ": " + message;
+    console.log(printMessage);
+    consoleText(printMessage);
 }
+
+function consoleText(printMessage) {
+    var ul = document.getElementById("shell-body");
+    var li = document.createElement("li");
+    li.appendChild(document.createTextNode(printMessage));
+    ul.insertBefore(li, ul.childNodes[0]);
+}
+
+function getDateTime() {
+    var currentdate = new Date();
+    var datetime = "Last Sync: "
+        + pad(currentdate.getDate()) + "/"
+        + pad((currentdate.getMonth() + 1)) + "/"
+        + currentdate.getFullYear() + " @ "
+        + pad(currentdate.getHours()) + ":"
+        + pad(currentdate.getMinutes()) + ":"
+        + pad(currentdate.getSeconds());
+    return datetime;
+}
+
+function pad(n) { return ("0" + n).slice(-2); }
